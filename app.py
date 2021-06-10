@@ -4,7 +4,13 @@ from plotting import plot_log_scale
 from allan_variance import overlapping_allan_deviation as oadev
 from noise_synthesis import make_angle_random_walk_series, make_bias_instability_series, make_rate_random_walk_series
 
+#TODO:  Validate parameter types to reduce the number of type conversions
+#TODO:  Set boundaries on params; e.g. sim_time >= 0
+#TODO:  Handle an empty (all 0s) simulation
+#TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
+#TODO:  Refactor Allan deviation plotting to use Altair
 
+# Sidebar 
 
 # Initialize simulation parameters
 st.sidebar.title("Simulation Parameters")
@@ -19,7 +25,6 @@ fs = st.sidebar.text_input(
 )
 
 st.sidebar.markdown("Generating {} data points".format(int(float(sim_time)*float(fs))))
-
 
 
 # Initialize noise parameters
@@ -50,10 +55,13 @@ rrw_coeff = st.sidebar.text_input(
 )
 
 
+# Main app body
+
 # Containerize the sections of the main app
 gyro_time_series = st.beta_container()
 allan_deviation = st.beta_container()
 
+# Simulated gyro signal section
 with gyro_time_series:
     sim_time = float(sim_time)
     fs = float(fs)
@@ -75,6 +83,9 @@ with gyro_time_series:
 
     st.line_chart(combined_noise)
 
+
+
+# Calculated Allan deviation section
 with allan_deviation:
     taus, allan_values = oadev(combined_noise, fs)
 
