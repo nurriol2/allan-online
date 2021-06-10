@@ -9,6 +9,7 @@ from noise_synthesis import make_angle_random_walk_series, make_bias_instability
 #TODO:  Handle an empty (all 0s) simulation
 #TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
 #TODO:  Refactor Allan deviation plotting to use Altair
+#TODO:  Add axis labels for Altair type plot
 
 # Sidebar 
 
@@ -56,6 +57,20 @@ rrw_coeff = st.sidebar.text_input(
 
 
 # Main app body
+st.title("Allan Online")
+st.markdown("""
+**Allan Online** is an open source tool for simulating gyroscopes and accelerometers found on inertial measurement units (IMU). 
+**Allan Online** gives users everywhere the power to characterize their navigation hardware in software!
+
+## How to use **Allan Online**
+Open the sidebar to reveal the simulation parameters. Choose how long the simulation should run and set the sampling rate in the *Simulation Parameters* section.
+A dataset will be generated on screen immediately. The number of samples in this dataset can be seen below the sampling rate.
+
+Under *Noise Parameters*, choose the noise sources affecting the IMU by checking the boxes. By default, all noise sources are included.
+
+After setting all of the parameters, a simulated hardware signal and its corresponding Allan deviation are updated on screen.
+""")
+
 
 # Containerize the sections of the main app
 gyro_time_series = st.beta_container()
@@ -63,6 +78,8 @@ allan_deviation = st.beta_container()
 
 # Simulated gyro signal section
 with gyro_time_series:
+
+    # Convert input parameters str -> float
     sim_time = float(sim_time)
     fs = float(fs)
     num_samples = int(float(sim_time)*float(fs))
@@ -71,8 +88,10 @@ with gyro_time_series:
     bi_coeff = float(bi_coeff)
     rrw_coeff = float(rrw_coeff)
 
+    # Gyro/Accel signal
     combined_noise = np.zeros(shape=(num_samples, ))
 
+    # Include noise source iff include variable is `True`
     if incl_arw:
         combined_noise += make_angle_random_walk_series(arw_coeff, fs, sim_time)
     if incl_bi:
@@ -81,12 +100,32 @@ with gyro_time_series:
     if incl_rrw:
         combined_noise += make_rate_random_walk_series(rrw_coeff, fs, sim_time)
 
+    
+    st.title("Stationary IMU Signal")
+    st.write("""
+    The following plot is a simulation of the data captured by the on-board computer of the IMU.
+
+    Although the virtual IMU is completely stationary, this plot shows that the sources of noise in the system are introducing error to the measurement. 
+
+    The plot is interactive so users can probe and investigate their results, as well as save them.
+    """)
+
+    # Plot the simulated signal
     st.line_chart(combined_noise)
 
 
 
 # Calculated Allan deviation section
 with allan_deviation:
+
+    st.title("The Allan Deviation")
+    st.write("""
+    The following plot is shows the Allan deviation that corresponds to the above IMU signal.
+
+    The Allan deviation is a clever mathematical tool that is used to identify the noise sources polluting the IMU signal. 
+    The Allan deviation has further uses in quantifying the impact of those same noise sources.
+    """)
+
     taus, allan_values = oadev(combined_noise, fs)
 
     log_plot = plot_log_scale(taus, allan_values)
