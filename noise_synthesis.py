@@ -180,4 +180,4 @@ def make_rate_random_walk_series(coeff, fs, sim_time):
     white_noise_series = sigma_rrw*np.random.randn(num_samples)
     rrw_series = (1/fs)*np.cumsum(white_noise_series)
 
-    return rrw_series
+    return rrw_series 
