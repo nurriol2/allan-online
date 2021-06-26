@@ -74,8 +74,12 @@ def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
     for i in range(1, trunc_limit+1):
         ith_iir_coeff = (i-1-ALPHA/2)*(a[i-1])/i
         a.append(ith_iir_coeff)
-    assert(len(a)==trunc_limit+1)
-    iir_coeffs = np.asarray(a).reshape((-1, 1))
+    assert (len(a)==trunc_limit+1), f"Wrong number of IIR Coefficients. Have {len(a)} Require {trunc_limit+1}"
+
+    iir_coeffs = np.asarray(a).reshape((1, -1))
+
+    # Require a row vector of IIR coefficients
+    assert (iir_coeffs.shape[0]==1 and iir_coeffs.shape[1]!=0), f"Require a row vector. Got shape {iir_coeffs.shape}"
 
 
     ### Step 4 - DO white noise shaping ###
@@ -87,34 +91,36 @@ def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
     
     scaled_white_noise = sigma_fn*white_noise
     for count in range(trunc_limit+1, num_terms):
-        iir_slice = iir_coeffs[1:-1]
+
+        iir_slice = iir_coeffs[0][1:].reshape(1,-1)
+        # Condition that iir_slice is also a row vector
+        assert iir_slice.shape[0]==1 and iir_slice.shape[1]!=0, f"Require a row vector. Got shape {iir_slice.shape}"
+
         white_noise_sample = scaled_white_noise[count]
 
-        shape_values_slice = shape_values[count-trunc_limit:count]
-        values_col_vec = np.transpose(np.fliplr(shape_values_slice)).reshape(-1, 1)
-        
-        # Must be a column vector
-        assert values_col_vec.shape[1]==1, f"AFTER TRANSPOSE {values_col_vec.shape}"        
+        shape_values_slice = shape_values[0][count-trunc_limit:count].reshape(1, -1)
+        values_col_vec = np.transpose(np.fliplr(shape_values_slice))
+        # Condition for a column vector
+        assert values_col_vec.shape[1]==1 and values_col_vec.shape[0]!=0, f"Require column vector. Got shape {values_col_vec.shape}"
         # Condition for matrix multiplication
-        assert values_col_vec.shape[0]==iir_slice.shape[1], f"VALUES COLUMN VECTOR {values_col_vec.shape}\nIIR SLICE {iir_slice.shape}"
-        # Condition for mtx mult. to return a 1x1 array
-        assert values_col_vec.shape[1]== 1
-        assert iir_slice.shape[0]==1
+        assert iir_slice.shape[1]==values_col_vec.shape[0], f"Incompatible inner dimensions A*B = {iir_slice.shape}*{values_col_vec.shape}"
+        
+        single_value = np.matmul(iir_slice, values_col_vec) + white_noise_sample
+        assert single_value!=0, f"Require non-zero value. Got {single_value}"
 
-        single_element = np.multiply(iir_slice, values_col_vec) + white_noise_sample
-        assert single_element.size==1
-        assert single_element>0
+        shape_values[0][count+1] = single_value
 
-        shape_values[count+1] = single_element
+    assert np.any(shape_values), f"Array has no non-zero values"
     
+
     ### Step 5 - Return values ###
     # Do a circular shift of the shaped values
     # (transpose) of shaped values container is the Flicker noise series to return
 
-    fn_series = np.roll(shape_values, [0, -trunc_limit])
+    #fn_series = np.roll(shape_values, [0, -trunc_limit])
 
 
-    return fn_series
+    return shape_values
 
 
 # Simulate rate random walk noise from given parameters
