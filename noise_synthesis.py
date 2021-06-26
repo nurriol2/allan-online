@@ -117,10 +117,10 @@ def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
     # Do a circular shift of the shaped values
     # (transpose) of shaped values container is the Flicker noise series to return
 
-    #fn_series = np.roll(shape_values, [0, -trunc_limit])
+    fn_series = np.roll(shape_values, [0, -trunc_limit])
 
 
-    return shape_values
+    return fn_series
 
 
 # Simulate rate random walk noise from given parameters
