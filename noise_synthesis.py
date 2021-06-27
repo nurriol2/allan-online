@@ -155,7 +155,7 @@ def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
     fn_series = np.roll(shape_values, [0, -trunc_limit])
 
 
-    return fn_series
+    return fn_series[0][0:]
 
 
 # Simulate rate random walk noise from given parameters
