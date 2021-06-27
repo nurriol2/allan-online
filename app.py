@@ -1,15 +1,17 @@
+from math import trunc
 import streamlit as st
 import numpy as np
 from plotting import plot_log_scale
 from allan_variance import overlapping_allan_deviation as oadev
-from noise_synthesis import make_angle_random_walk_series, make_bias_instability_series, make_rate_random_walk_series
+from noise_synthesis import make_angle_random_walk_series, make_bias_instability_series, make_rate_random_walk_series, simulate_flicker_noise
 
-#TODO:  Validate parameter types to reduce the number of type conversions
-#TODO:  Set boundaries on params; e.g. sim_time >= 0
-#TODO:  Handle an empty (all 0s) simulation
-#TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
-#TODO:  Refactor Allan deviation plotting to use Altair
-#TODO:  Add axis labels for Altair type plot
+# TODO:  Validate parameter types to reduce the number of type conversions
+# TODO:  Set boundaries on params; e.g. sim_time >= 0
+# TODO:  Handle an empty (all 0s) simulation
+# TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
+# TODO:  Refactor Allan deviation plotting to use Altair
+# TODO:  Add axis labels for Altair type plot
+# TODO:  Add a "rerun" button to avoid having to change params each run
 
 # Sidebar 
 
@@ -17,7 +19,7 @@ from noise_synthesis import make_angle_random_walk_series, make_bias_instability
 st.sidebar.title("Simulation Parameters")
 sim_time = st.sidebar.text_input(
     label="Simulation Time (sec)",
-    value=100
+    value=1000
 )
 
 fs = st.sidebar.text_input(
@@ -40,18 +42,12 @@ arw_coeff = st.sidebar.text_input(
 incl_bi = st.sidebar.checkbox("Bias Instability (BI)", value=True)
 bi_coeff = st.sidebar.text_input(
     label="BI Coefficient (\u00B0/\u221Asec)",
-    value=10
-)
-
-corr_time = st.sidebar.text_input(
-    label="Correlation Time (units)",
-    value = 1000
-
+    value=0.005
 )
 
 trunc_limit = st.sidebar.text_input(
     label="Number of IIR Filter Coefficients",
-    value = 5000
+    value = 500
 )
 
 incl_rrw = st.sidebar.checkbox("Rate Random Walk (RRW)", value=True)
@@ -100,8 +96,8 @@ with gyro_time_series:
     if incl_arw:
         combined_noise += make_angle_random_walk_series(arw_coeff, fs, sim_time)
     if incl_bi:
-        corr_time = float(corr_time)
-        combined_noise += make_bias_instability_series(bi_coeff, corr_time, fs, sim_time)
+        trunc_limit = int(trunc_limit)
+        combined_noise += simulate_flicker_noise(bi_coeff, fs, sim_time, trunc_limit)
     if incl_rrw:
         combined_noise += make_rate_random_walk_series(rrw_coeff, fs, sim_time)
 
