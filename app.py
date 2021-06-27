@@ -49,6 +49,11 @@ corr_time = st.sidebar.text_input(
 
 )
 
+trunc_limit = st.sidebar.text_input(
+    label="Number of IIR Filter Coefficients",
+    value = 5000
+)
+
 incl_rrw = st.sidebar.checkbox("Rate Random Walk (RRW)", value=True)
 rrw_coeff = st.sidebar.text_input(
     label="RRW Coefficient (units/sec\u2022\u221Asec)",
