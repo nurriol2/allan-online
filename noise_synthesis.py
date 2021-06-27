@@ -51,7 +51,7 @@ def make_bias_instability_series(coeff, corr_time, fs, sim_time):
 
     return bi_series
 
-# FIXME:  Power spectral density does not fall as 1/f
+
 # Simulate flicker noise by shaping a white noise series
 def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
     """Generate flicker noise by shaping a white noise series.
@@ -128,7 +128,7 @@ def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
     scaled_white_noise = sigma_fn*white_noise
     for count in range(trunc_limit+1, num_terms):
 
-        iir_slice = iir_coeffs[0][1:].reshape(1,-1)
+        iir_slice = -1*iir_coeffs[0][1:].reshape(1,-1)
         # Condition that iir_slice is also a row vector
         assert iir_slice.shape[0]==1 and iir_slice.shape[1]!=0, f"Require a row vector. Got shape {iir_slice.shape}"
 
