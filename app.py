@@ -1,7 +1,7 @@
 from math import trunc
 import streamlit as st
 import numpy as np
-from plotting import plot_log_scale
+from plotting import get_x_axis, plot_time_series, plot_allan_deviation
 from allan_variance import overlapping_allan_deviation as oadev
 from noise_synthesis import make_angle_random_walk_series, make_bias_instability_series, make_rate_random_walk_series, simulate_flicker_noise
 
@@ -9,8 +9,8 @@ from noise_synthesis import make_angle_random_walk_series, make_bias_instability
 # TODO:  Set boundaries on params; e.g. sim_time >= 0
 # TODO:  Handle an empty (all 0s) simulation
 # TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
-# TODO:  Refactor Allan deviation plotting to use Altair
-# TODO:  Add axis labels for Altair type plot
+
+
 # TODO:  Add a "rerun" button to avoid having to change params each run
 
 # Sidebar 
@@ -112,7 +112,9 @@ with gyro_time_series:
     """)
 
     # Plot the simulated signal
-    st.line_chart(combined_noise)
+    timestamps = get_x_axis(combined_noise)
+    combined_noise_plot = plot_time_series(timestamps, combined_noise)
+    st.plotly_chart(combined_noise_plot)
 
 
 
@@ -128,9 +130,13 @@ with allan_deviation:
     """)
 
     taus, allan_values = oadev(combined_noise, fs)
+    # FIXME:  Data must be 1-D for px to work
+    # TODO:  Change the return shape to 1-D in allan dev calculation
+    taus = taus.reshape(-1,)
+    allan_values = allan_values.reshape(-1,)
 
-    log_plot = plot_log_scale(taus, allan_values)
-    st.pyplot(log_plot)
+    allan_plot = plot_allan_deviation(taus, allan_values)
+    st.plotly_chart(allan_plot)
 
 
 
