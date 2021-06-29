@@ -1,14 +1,33 @@
-import matplotlib.pyplot as plt
-import streamlit as st
+import plotly.express as px
+import numpy as np
 
-def plot_log_scale(x, y):
+def get_x_axis(data):
+    return np.arange(0, len(data), 1)
 
-    fig, ax = plt.subplots()
+def plot_time_series(time, y):
 
-    ax.loglog(x, y)
-    plt.title("Allan Deviation of Simulated Signal")
-    plt.ylabel("Allan Deviation $\sigma(\\tau)$")
-    plt.xlabel("Averaging Time $\\tau$ (sec)")
-    plt.grid(b=True)
+    time_series_labels = {"Time":"Time (sec)",
+                        "Noise Amplitude": "Noise Amplitude (units)"}
 
-    return fig 
+    fig = px.line(data_frame={"Time":time, "Noise Amplitude":y},
+                    x="Time",
+                    y="Noise Amplitude",
+                    hover_name="Noise Amplitude",
+                    labels=time_series_labels)
+
+    return fig
+
+def plot_allan_deviation(avg_time, allan_dev):
+
+    allan_deviation_labels = {"Averaging Time":"\u03C4 (sec)",
+                                "Allan Deviation":"\u03C3(\u03C4)"}
+    
+    fig = px.line(data_frame={"Averaging Time":avg_time, "Allan Deviation":allan_dev},
+                    x="Averaging Time",
+                    y="Allan Deviation",
+                    hover_name="Allan Deviation",
+                    log_x=True,
+                    log_y=True,
+                    labels=allan_deviation_labels)
+
+    return fig
