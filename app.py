@@ -6,7 +6,7 @@ from noise_synthesis import make_angle_random_walk_series, make_bias_instability
 
 # TODO:  Determine relation between `trunc_limit` and total number of points to generate
 
-# TODO:  Handle an empty (all 0s) simulation
+
 # TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
 
 
