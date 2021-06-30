@@ -6,6 +6,7 @@ from noise_synthesis import make_angle_random_walk_series, make_rate_random_walk
 
 # TODO:  Determine relation between `trunc_limit` and total number of points to generate
 # TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
+# TODO:  Implement checks for minimum number of noise samples (AOTC streaming data)
 
 # Sidebar 
 
