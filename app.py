@@ -5,6 +5,7 @@ from allan_variance import overlapping_allan_deviation as oadev
 from noise_synthesis import make_angle_random_walk_series, make_bias_instability_series, make_rate_random_walk_series, simulate_flicker_noise
 
 # TODO:  Determine relation between `trunc_limit` and total number of points to generate
+
 # TODO:  Handle an empty (all 0s) simulation
 # TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
 
@@ -18,14 +19,16 @@ st.sidebar.title("Simulation Parameters")
 
 sim_time = st.sidebar.number_input(
     label="Simulation Time (sec)",
-    min_value=0.0,
-    value=1000.0
+    min_value=1.0,
+    value=1000.0,
+    format="%.2f"
 )
 
 fs = st.sidebar.number_input(
     label="Sampling Rate (Hz)",
-    min_value=0.0,
-    value=10.0
+    min_value=1.0,
+    value=10.0,
+    format="%.2f"
 )
 
 st.sidebar.markdown("Generating {} data points".format(int(float(sim_time)*float(fs))))
@@ -37,28 +40,31 @@ st.sidebar.title("Noise Parameters")
 incl_arw = st.sidebar.checkbox("Angle Random Walk (ARW)", value=True)
 arw_coeff = st.sidebar.number_input(
     label="ARW Coefficient (\u00B0/\u221Asec)",
-    min_value=0.0,
-    value=0.25
+    min_value=0.001,
+    value=0.25,
+    format="%.3f"
 )
 
 incl_bi = st.sidebar.checkbox("Bias Instability (BI)", value=True)
 bi_coeff = st.sidebar.number_input(
     label="BI Coefficient (\u00B0/\u221Asec)",
-    min_value=0.0,
-    value=0.005
+    min_value=0.001,
+    value=0.005,
+    format="%.3f"
 )
 
 trunc_limit = st.sidebar.number_input(
     label="Number of IIR Filter Coefficients",
-    min_value=0,
+    min_value=1,
     value = 500
 )
 
 incl_rrw = st.sidebar.checkbox("Rate Random Walk (RRW)", value=True)
 rrw_coeff = st.sidebar.number_input(
     label="RRW Coefficient (units/sec\u2022\u221Asec)",
-    min_value=0.0,
-    value=0.01
+    min_value=0.001,
+    value=0.01,
+    format="%.3f"
 )
 
 
