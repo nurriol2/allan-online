@@ -131,10 +131,6 @@ with allan_deviation:
     """)
 
     taus, allan_values = oadev(combined_noise, fs)
-    # FIXME:  Data must be 1-D for px to work
-    # TODO:  Change the return shape to 1-D in allan dev calculation
-    taus = taus.reshape(-1,)
-    allan_values = allan_values.reshape(-1,)
 
     allan_plot = plot_allan_deviation(taus, allan_values)
     st.plotly_chart(allan_plot)

@@ -62,4 +62,8 @@ def overlapping_allan_deviation(omega, Fs, maxNumM=100):
     #the allan deviation is the square root of the allan variance
     adev = np.sqrt(avar)
 
+    # Reshape returned arrays to be row vectors
+    tau = tau.reshape(-1,)
+    adev = adev.reshape(-1,)
+    
     return (tau, adev)
