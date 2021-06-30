@@ -2,15 +2,10 @@ import streamlit as st
 import numpy as np
 from plotting import get_x_axis, plot_time_series, plot_allan_deviation
 from allan_variance import overlapping_allan_deviation as oadev
-from noise_synthesis import make_angle_random_walk_series, make_bias_instability_series, make_rate_random_walk_series, simulate_flicker_noise
+from noise_synthesis import make_angle_random_walk_series, make_rate_random_walk_series, simulate_flicker_noise
 
 # TODO:  Determine relation between `trunc_limit` and total number of points to generate
-
-
 # TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
-
-
-# TODO:  Add a "rerun" button to avoid having to change params each run
 
 # Sidebar 
 
