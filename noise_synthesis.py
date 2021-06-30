@@ -151,7 +151,7 @@ def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
     ### Step 5 - Return values ###
     # Do a circular shift of the `shape_values` array
 
-    # FIXME:  The tail of this array flattens to 0. Change the size of roll?
+    # The number of unshaped values depends on the size of `trunc_limit`
     fn_series = np.roll(shape_values, [0, -trunc_limit])
 
 
