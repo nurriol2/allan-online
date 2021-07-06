@@ -36,31 +36,31 @@ st.sidebar.title("Error Coefficients")
 incl_arw = st.sidebar.checkbox("Angle Random Walk (ARW)", value=True)
 arw_coeff = st.sidebar.number_input(
     label="ARW Coefficient (\u00B0/\u221Asec)",
-    min_value=0.001,
+    min_value=0.000_000_001,
     value=0.25,
-    format="%.3f"
+    format="%f"
 )
 
 incl_bi = st.sidebar.checkbox("Bias Instability (BI)", value=True)
 bi_coeff = st.sidebar.number_input(
     label="BI Coefficient (\u00B0/sec)",
-    min_value=0.001,
+    min_value=0.000_000_001,
     value=0.005,
-    format="%.3f"
+    format="%f"
 )
 
 trunc_limit = st.sidebar.number_input(
     label="Number of IIR Filter Coefficients",
     min_value=1,
-    value = 500
+    value=500
 )
 
 incl_rrw = st.sidebar.checkbox("Rate Random Walk (RRW)", value=True)
 rrw_coeff = st.sidebar.number_input(
     label="RRW Coefficient (units/sec\u2022\u221Asec)",
-    min_value=0.001,
+    min_value=0.000_000_001,
     value=0.01,
-    format="%.3f"
+    format="%f"
 )
 
 
