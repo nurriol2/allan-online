@@ -114,7 +114,7 @@ with gyro_time_series:
     """)
 
     # Plot the simulated signal
-    timestamps = get_x_axis(combined_noise)
+    timestamps = get_x_axis(sim_time, fs)
     combined_noise_plot = plot_time_series(timestamps, combined_noise)
     st.plotly_chart(combined_noise_plot)
 
