@@ -1,8 +1,8 @@
 import plotly.express as px
 import numpy as np
 
-def get_x_axis(data):
-    return np.arange(0, len(data), 1)
+def get_x_axis(sim_time, fs):
+    return np.linspace(0, int(sim_time), int(sim_time*fs))
 
 def plot_time_series(time, y):
 
