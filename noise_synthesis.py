@@ -12,7 +12,7 @@ def make_angle_random_walk_series(coeff, fs, sim_time):
         sim_time (int or float): Length of the simulation in seconds
 
     Returns:
-        numpy.array: Array of samples making an angle random walk noise series
+        numpy.array: Array of samples making an angle random walk noise time series
     """
     num_samples = int(sim_time*fs)
 
@@ -36,7 +36,7 @@ def make_bias_instability_series(coeff, corr_time, fs, sim_time):
         sim_time (int or float): Length of the simulation in seconds
 
     Returns:
-        numpy.array: Array of samples making a flicker noise series
+        numpy.array: Array of samples making a flicker noise time series
     """
     num_samples = int(sim_time*fs)
 
@@ -64,7 +64,7 @@ def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
         trunc_limit (int): Number of IIR filter coefficients
 
     Returns:
-        numpy.array: 1 by `numTerms+1` element array of samples making the flicker noise series
+        numpy.array: 1 by `numTerms+1` element array of samples making the flicker noise time series
     """
 
     # Number of terms in the final flicker noise sequence
@@ -161,7 +161,7 @@ def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
 # Simulate rate random walk noise from given parameters
 def make_rate_random_walk_series(coeff, fs, sim_time):
     """Generate rate random walk noise series by scaling
-    a white noise series.
+    a white noise time series.
 
     Args:
         coeff (float): Rate random walk coefficient
@@ -169,7 +169,7 @@ def make_rate_random_walk_series(coeff, fs, sim_time):
         sim_time (int or float): Length of simulation in seconds
 
     Returns:
-        numpy.array: Array of values comprising a rate random walk noise series
+        numpy.array: Array of values comprising a rate random walk noise time series
     """
     num_samples = int(sim_time*fs)
 
@@ -180,8 +180,19 @@ def make_rate_random_walk_series(coeff, fs, sim_time):
 
     return rrw_series 
 
-def simulate_quantization_noise(fs, sim_time, noise_amp=3, noise_freq=1):
-    
+def simulate_quantization_noise(fs, sim_time, noise_amp=3.0, noise_freq=1.0):
+    """Generate a quantization noise time series by adding white noise to a
+    pure tone sinewave.
+
+    Args:
+        fs (int or float): Sampling rate in Hz
+        sim_time (int or float): Length of the simulation in seconds
+        noise_amp (float, optional): Amplitude of the pure tone sinewave. Also used to scale white noise series. Defaults to 3.0.
+        noise_freq (float, optional): Frequency of the pure tone sinewave. Defaults to 1.0.
+
+    Returns:
+        numpy.array: Array of values comprising a quantization noise time series
+    """
     num_terms = int(sim_time*fs)
     t = np.linspace(0, sim_time, sim_time*fs+1)
 
