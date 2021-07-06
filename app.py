@@ -43,7 +43,7 @@ arw_coeff = st.sidebar.number_input(
 
 incl_bi = st.sidebar.checkbox("Bias Instability (BI)", value=True)
 bi_coeff = st.sidebar.number_input(
-    label="BI Coefficient (\u00B0/\u221Asec)",
+    label="BI Coefficient (\u00B0/sec)",
     min_value=0.001,
     value=0.005,
     format="%.3f"
