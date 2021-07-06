@@ -31,7 +31,7 @@ st.sidebar.markdown("Generating {} data points".format(int(float(sim_time)*float
 
 
 # Initialize noise parameters
-st.sidebar.title("Noise Parameters")
+st.sidebar.title("Error Coefficients")
 
 incl_arw = st.sidebar.checkbox("Angle Random Walk (ARW)", value=True)
 arw_coeff = st.sidebar.number_input(
@@ -74,9 +74,10 @@ st.markdown("""
 Open the sidebar to reveal the simulation parameters. Choose how long the simulation should run and set the sampling rate in the *Simulation Parameters* section.
 A dataset will be generated on screen immediately. The number of samples in this dataset can be seen below the sampling rate.
 
-Under *Noise Parameters*, choose the noise sources affecting the IMU by checking the boxes. By default, all noise sources are included.
+Under *Error Coefficients*, choose which noise type should be simulated by checking the boxes. By default, all noise sources are included.
+Then, define an error coefficient for each noise type.
 
-After setting all of the parameters, a simulated hardware signal and its corresponding Allan deviation are updated on screen.
+After setting all of the parameters, a simulated signal of a single axis gyroscope and the corresponding Allan deviation are updated on screen.
 """)
 
 
@@ -103,9 +104,9 @@ with gyro_time_series:
         combined_noise += make_rate_random_walk_series(rrw_coeff, fs, sim_time)
 
     
-    st.title("Stationary IMU Signal")
+    st.title("Single Stationary Gyroscope Signal")
     st.write("""
-    The following plot is a simulation of the data captured by the on-board computer of the IMU.
+    The following plot is a simulation of the data captured by the on-board computer of the IMU for a single gyroscope.
 
     Although the virtual IMU is completely stationary, this plot shows that the sources of noise in the system are introducing error to the measurement. 
 
@@ -124,9 +125,9 @@ with allan_deviation:
 
     st.title("The Allan Deviation")
     st.write("""
-    The following plot is shows the Allan deviation that corresponds to the above IMU signal.
+    The following plot is shows the Allan deviation that corresponds to the above gyroscope signal.
 
-    The Allan deviation is a clever mathematical tool that is used to identify the noise sources polluting the IMU signal. 
+    The Allan deviation is a clever mathematical tool that is used to identify the noise sources polluting a time series. 
     The Allan deviation has further uses in quantifying the impact of those same noise sources.
     """)
 
