@@ -180,11 +180,12 @@ def make_rate_random_walk_series(coeff, fs, sim_time):
 
     return rrw_series 
 
-def simulate_quantization_noise(fs, sim_time, noise_amp=3.0, noise_freq=1.0):
+def simulate_quantization_noise(K, fs, sim_time, noise_amp=3.0, noise_freq=1.0):
     """Generate a quantization noise time series by adding white noise to a
     pure tone sinewave.
 
     Args:
+        K (float):  Quantization Noise coefficient
         fs (int or float): Sampling rate in Hz
         sim_time (int or float): Length of the simulation in seconds
         noise_amp (float, optional): Amplitude of the pure tone sinewave. Also used to scale white noise series. Defaults to 3.0.
@@ -199,7 +200,6 @@ def simulate_quantization_noise(fs, sim_time, noise_amp=3.0, noise_freq=1.0):
     signal = noise_amp*np.sin((2*np.pi*noise_freq)*t)
     signal = signal + 0.1*noise_amp*np.random.randn(1, num_terms+1)
 
-    K = 1
     E = np.mean(fs*abs(np.diff(signal)))
     
     q = (K*E)/fs
