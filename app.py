@@ -114,6 +114,8 @@ with gyro_time_series:
         combined_noise += simulate_flicker_noise(bi_coeff, fs, sim_time, trunc_limit)
     if incl_rrw:
         combined_noise += make_rate_random_walk_series(rrw_coeff, fs, sim_time)
+    if incl_qn:
+        combined_noise += simulate_quantization_noise(qn_coeff, fs, sim_time)
 
     
     st.title("Single Stationary Gyroscope Signal")
