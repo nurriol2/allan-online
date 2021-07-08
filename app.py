@@ -75,6 +75,15 @@ qn_coeff = st.sidebar.number_input(
     format="%f"
 )
 
+# Rate ramp
+incl_rr = st.sidebar.checkbox("Rate Ramp (RR)", value=True)
+rr_coeff = st.sidebar.number_input(
+    label="Rate Ramp (\u00B0/sec\u00b2)",
+    min_value=0.000_000_001,
+    value=1e-8,
+    format="%f"
+)
+
 
 # Main app body
 st.title("Allan Online")
