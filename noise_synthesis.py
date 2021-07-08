@@ -195,7 +195,7 @@ def simulate_quantization_noise(K, fs, sim_time, noise_amp=3.0, noise_freq=1.0):
         numpy.array: Array of values comprising a quantization noise time series
     """
     num_terms = int(sim_time*fs)
-    t = np.linspace(0, sim_time, sim_time*fs+1)
+    t = np.linspace(0, sim_time, num_terms+1)
 
     signal = noise_amp*np.sin((2*np.pi*noise_freq)*t)
     signal = signal + 0.1*noise_amp*np.random.randn(1, num_terms+1)
