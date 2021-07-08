@@ -225,4 +225,4 @@ def simulate_rate_ramp(coeff, fs, sim_time):
         numpy.array: Array of values comprising a rate ramp time series
     """
     num_terms = int(sim_time*fs)
-    return coeff*np.linspace(0, sim_time, num_terms+1)
+    return coeff*np.linspace(0, sim_time, num_terms)
