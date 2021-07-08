@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 from plotting import get_x_axis, plot_time_series, plot_allan_deviation
 from allan_variance import overlapping_allan_deviation as oadev
-from noise_synthesis import make_angle_random_walk_series, make_rate_random_walk_series, simulate_flicker_noise
+from noise_synthesis import make_angle_random_walk_series, make_rate_random_walk_series, simulate_flicker_noise, simulate_quantization_noise
 
 # TODO:  Determine relation between `trunc_limit` and total number of points to generate
 # TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
@@ -30,9 +30,10 @@ fs = st.sidebar.number_input(
 st.sidebar.markdown("Generating {} data points".format(int(float(sim_time)*float(fs))))
 
 
-# Initialize noise parameters
+# Initialize error coefficients
 st.sidebar.title("Error Coefficients")
 
+# Angle random walk
 incl_arw = st.sidebar.checkbox("Angle Random Walk (ARW)", value=True)
 arw_coeff = st.sidebar.number_input(
     label="ARW Coefficient (\u00B0/\u221Asec)",
@@ -41,6 +42,7 @@ arw_coeff = st.sidebar.number_input(
     format="%f"
 )
 
+# Bias instability
 incl_bi = st.sidebar.checkbox("Bias Instability (BI)", value=True)
 bi_coeff = st.sidebar.number_input(
     label="BI Coefficient (\u00B0/sec)",
@@ -55,11 +57,21 @@ trunc_limit = st.sidebar.number_input(
     value=500
 )
 
+# Rate random walk
 incl_rrw = st.sidebar.checkbox("Rate Random Walk (RRW)", value=True)
 rrw_coeff = st.sidebar.number_input(
     label="RRW Coefficient (units/sec\u2022\u221Asec)",
     min_value=0.000_000_001,
     value=0.01,
+    format="%f"
+)
+
+# Quantization noise
+incl_qn = st.sidebar.checkbox("Quantization Noise (QN)", value=True)
+qn_coeff = st.sidebar.number_input(
+    label="QN Coefficient (\u00B0)",
+    min_value = 0.000_000_001,
+    value=0.0025,
     format="%f"
 )
 
