@@ -212,3 +212,17 @@ def simulate_quantization_noise(K, fs, sim_time, noise_amp=3.0, noise_freq=1.0):
     qn = qe_dot.flatten()
 
     return qn
+
+def simulate_rate_ramp(coeff, sim_time, fs):
+    """Generate a rate ramp time series
+
+    Args:
+        coeff (float): Rate ramp coefficient
+        sim_time (int or float): Length of the simulation in seconds
+        fs (int or float): Sampling rate in Hz
+
+    Returns:
+        numpy.array: Array of values comprising a rate ramp time series
+    """
+    num_terms = int(sim_time*fs)
+    return coeff*np.linspace(0, sim_time, num_terms+1)
