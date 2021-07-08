@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 from plotting import get_x_axis, plot_time_series, plot_allan_deviation
 from allan_variance import overlapping_allan_deviation as oadev
-from noise_synthesis import make_angle_random_walk_series, make_rate_random_walk_series, simulate_flicker_noise, simulate_quantization_noise
+from noise_synthesis import make_angle_random_walk_series, make_rate_random_walk_series, simulate_flicker_noise, simulate_quantization_noise, simulate_rate_ramp
 
 # TODO:  Determine relation between `trunc_limit` and total number of points to generate
 # TODO:  Include other noise sources e.g. Rate Ramp, Quantization noise
@@ -125,6 +125,8 @@ with gyro_time_series:
         combined_noise += make_rate_random_walk_series(rrw_coeff, fs, sim_time)
     if incl_qn:
         combined_noise += simulate_quantization_noise(qn_coeff, fs, sim_time)
+    if incl_rr:
+        combined_noise += simulate_rate_ramp(rr_coeff, fs, sim_time)
 
     
     st.title("Single Stationary Gyroscope Signal")
