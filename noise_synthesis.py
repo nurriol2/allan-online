@@ -213,7 +213,7 @@ def simulate_quantization_noise(K, fs, sim_time, noise_amp=3.0, noise_freq=1.0):
 
     return qn
 
-def simulate_rate_ramp(coeff, sim_time, fs):
+def simulate_rate_ramp(coeff, fs, sim_time):
     """Generate a rate ramp time series
 
     Args:
