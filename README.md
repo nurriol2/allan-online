@@ -1,6 +1,9 @@
 # Allan Online
+
 **Allan Online** is an open source tool for simulating gyroscopes and accelerometers found on inertial measurement units (IMU). 
 **Allan Online** gives users everywhere the power to characterize their navigation hardware in software!
+
+The app is running on Heroku [here](http://allan-online.herokuapp.com/
 
 # Current Features
 
