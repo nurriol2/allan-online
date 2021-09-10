@@ -23,7 +23,7 @@ def make_angle_random_walk_series(coeff, fs, sim_time):
     return arw_series
 
 
-# Simulate bias instability noise from given parameters
+# Use a 1st Order Markov model to simulate flicker noise
 def make_bias_instability_series(coeff, corr_time, fs, sim_time):
     """Alternative method for generating a flicker noise series.
     Generate flicker noise by calculating discrete time steps of a
@@ -50,7 +50,7 @@ def make_bias_instability_series(coeff, corr_time, fs, sim_time):
     return bi_series
 
 
-# Simulate flicker noise by shaping a white noise series
+# Use a finite filter model to simulate flicker noise
 def simulate_flicker_noise(coeff, fs, sim_time, trunc_limit):
     """Generate flicker noise by shaping a white noise series.
     This is the preferred method for generating a flicker noise
@@ -180,6 +180,8 @@ def make_rate_random_walk_series(coeff, fs, sim_time):
 
     return rrw_series 
 
+
+# Simulate quantization noise from given parameters
 def simulate_quantization_noise(K, fs, sim_time, noise_amp=3.0, noise_freq=1.0):
     """Generate a quantization noise time series by adding white noise to a
     pure tone sinewave.
@@ -213,6 +215,8 @@ def simulate_quantization_noise(K, fs, sim_time, noise_amp=3.0, noise_freq=1.0):
 
     return qn
 
+
+# Simulate rate random walk series from given parameters
 def simulate_rate_ramp(coeff, fs, sim_time):
     """Generate a rate ramp time series
 
