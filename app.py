@@ -13,7 +13,7 @@ st.sidebar.title("Simulation Parameters")
 sim_time = st.sidebar.number_input(
     label="Simulation Time (sec)",
     min_value=1.0,
-    value=30_000.0,
+    value=3_000.0,
     format="%.2f"
 )
 
@@ -52,7 +52,7 @@ first_order_markov_bi_coeff = st.sidebar.number_input(
 corr_time = st.sidebar.number_input(
     label="Correlation Time (sec)",
     min_value=0.0,
-    value=1000.0,
+    value=10.0,
     format="%f"
 )
 
