@@ -85,7 +85,7 @@ def fit_rate_random_walk_line(tau_array, allan_array):
     
     return computed_coeff * t
 
-def fit_bias_instability(tau_array, allan_array):
+def fit_bias_instability_line(tau_array, allan_array):
 
     # Bias instability appears with slope 0 on Allan deviation
     BI_SLOPE = 0
