@@ -7,7 +7,7 @@ def find_index_of_closest_slope(x, y, slope):
     logy = np.log10(y)
 
     # Calculate the derivative of the curve y(x) in log space
-    dlogy = np.divide(np.diff(y), np.diff(x))
+    dlogy = np.divide(np.diff(logy), np.diff(logx))
 
     # Calculate the index where value of derivative is closest to desired slope
     target_index = np.abs(dlogy-slope).argmin()
