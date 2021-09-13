@@ -25,44 +25,81 @@ def calculate_log_space_y_intercept(x, y, slope, target_index):
 
     return intercept
 
-def calculate_coeff_from_line(slope, tau_star, intercept):
+def calculate_coeff_from_slope(slope, tau_star, intercept):
+
+    # Compute coefficient in log space
+    logCoeff = slope*np.log10(tau_star) + intercept
+
+    # Undo log base 10
+    coeff = 10**logCoeff
+
+    return coeff
+
+def calculate_coeff_with_slope_zero(intercept):
     
-    coeff = None
+    # Bias instability coefficient is scaled by ~0.664
+    SCALE_FACTOR = (2*np.log(2)/np.pi)**0.5
 
-    # For noise coefficient different than Bias Instability
-    if slope!=0:
+    # Computer coefficient in log space
+    logCoeff = intercept - np.log10(SCALE_FACTOR)
 
-        # Compute coefficient in log space
-        logCoeff = slope*np.log10(tau_star) + intercept
-
-        # Undo log base 10
-        coeff = 10**logCoeff
-    
-    # For Bias Instability noise coefficient
-    else:
-
-        # Bias Instability coefficient is always scaled by ~0.664
-        SCALE_FACTOR = (2*np.log(2)/np.pi)**0.5
-        
-        # Undo log base 10
-        coeff = 10**(intercept - np.log10(SCALE_FACTOR))
+    # Undo log base 10
+    coeff = 10**logCoeff
 
     return coeff
 
 
-def fit_random_walk_line(rw_coeff, tau_array):
+def fit_random_walk_line(tau_array, allan_array):
+    
+    # Random walk coefficient found when tau = 1
+    TAU_STAR = 1
+    # Random walk appears with slope -0.5 on Allan deviation plot
+    RW_SLOPE = -0.5
+    # Find where Allan deviation curve has slope closest to -0.5
+    rw_index = find_index_of_closest_slope(tau_array, allan_array, RW_SLOPE)
+    # Calculate the intercept for the fit line
+    rw_intercept = calculate_log_space_y_intercept(tau_array, allan_array, RW_SLOPE, rw_index)
+    # Calculate the random walk coefficient 
+    computed_coeff = calculate_coeff_from_slope(RW_SLOPE, TAU_STAR, rw_intercept)
+
+    # Array of unscaled cluster times
     t = np.power(tau_array, 0.5)
     
-    return np.divide(rw_coeff, t)
+    return np.divide(computed_coeff, t)
 
-def fit_rate_random_walk_line(rrw_coeff, tau_array):
+def fit_rate_random_walk_line(tau_array, allan_array):
     
+    # Rate random walk coefficient found when tau = 3
+    TAU_STAR = 3
+    # Rate random walk appears with slope +0.5 on Allan deviation plot
+    RRW_SLOPE = 0.5
+    # Find where Allan deviation curve has slope closest to 0.5
+    rrw_index = find_index_of_closest_slope(tau_array, allan_array, RRW_SLOPE)
+    # Calculate the intercept for the fit line
+    rrw_intercept = calculate_log_space_y_intercept(tau_array, allan_array, RRW_SLOPE, rrw_index)
+    # Calculate the rate random walk coefficient
+    computed_coeff = calculate_coeff_from_slope(RRW_SLOPE, TAU_STAR, rrw_intercept)
+
+    # Array of unscaled cluster times
     t = np.power(np.divide(tau_array,3), 0.5)
     
-    return rrw_coeff * t
+    return computed_coeff * t
 
-def fit_bias_instability_line(bi_coeff, tau_array):
+def fit_bias_instability(tau_array, allan_array):
+
+    # Bias instability appears with slope 0 on Allan deviation
+    BI_SLOPE = 0
+
+    # Find where the Allan deviation has slope closest to 0
+    bi_index = find_index_of_closest_slope(tau_array, allan_array, BI_SLOPE)
     
-    product = bi_coeff * (2*np.log(2)/np.pi)**0.5
-    
-    return product * np.ones(len(tau_array))
+    # Calculate intercept for fit line
+    bi_intercept = calculate_log_space_y_intercept(tau_array, allan_array, BI_SLOPE, bi_index)
+
+    # Calculate the bias instability coefficient
+    computed_coeff = calculate_coeff_with_slope_zero(bi_intercept)
+
+    # Horizontal line 
+    t = np.ones(len(tau_array))
+
+    return computed_coeff * (2*np.log(2)/np.pi)**0.5 * t
