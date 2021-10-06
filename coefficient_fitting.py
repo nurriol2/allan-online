@@ -65,7 +65,7 @@ def fit_random_walk_line(tau_array, allan_array):
     # Array of unscaled cluster times
     t = np.power(tau_array, 0.5)
     
-    return np.divide(computed_coeff, t)
+    return (np.divide(computed_coeff, t), computed_coeff)
 
 def fit_rate_random_walk_line(tau_array, allan_array):
     
@@ -83,7 +83,7 @@ def fit_rate_random_walk_line(tau_array, allan_array):
     # Array of unscaled cluster times
     t = np.power(np.divide(tau_array,3), 0.5)
     
-    return computed_coeff * t
+    return (computed_coeff * t, computed_coeff)
 
 def fit_bias_instability_line(tau_array, allan_array):
 
@@ -102,4 +102,4 @@ def fit_bias_instability_line(tau_array, allan_array):
     # Horizontal line 
     t = np.ones(len(tau_array))
 
-    return computed_coeff * (2*np.log(2)/np.pi)**0.5 * t
+    return (computed_coeff * (2*np.log(2)/np.pi)**0.5 * t, computed_coeff)
