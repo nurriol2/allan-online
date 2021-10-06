@@ -33,7 +33,7 @@ def plot_allan_deviation(avg_time, allan_dev, noise_model, verbose):
                     labels=allan_deviation_labels)
     
     if verbose:
-        if noise_model:
+        if noise_model[0]:
             rw_line = fit_random_walk_line(avg_time, allan_dev)
             fig.add_trace(go.Scatter(x=avg_time, y=rw_line[0], name=f"Random Walk", line=dict(dash="dash")))
             fig.add_annotation(xref="paper", yref="paper", x=1, y=0.2, text=f"Calculated Random Walk Coefficient: {rw_line[1]:.3}...", showarrow=False)
