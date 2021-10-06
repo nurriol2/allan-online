@@ -190,7 +190,7 @@ with allan_deviation:
     taus, allan_values = oadev(combined_noise, fs)
 
     # Create a figure for the Allan deviation
-    allan_plot = plot_allan_deviation(taus, allan_values)
+    allan_plot = plot_allan_deviation(taus, allan_values, noise_model)
 
     # Plot the Allan deviation
     st.plotly_chart(allan_plot)
