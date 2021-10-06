@@ -10,6 +10,8 @@ from noise_synthesis import make_angle_random_walk_series, make_rate_random_walk
 # Initialize simulation parameters
 st.sidebar.title("Simulation Parameters")
 
+verbose= st.sidebar.radio("Plot Fitting Lines", (True, False))
+
 sim_time = st.sidebar.number_input(
     label="Simulation Time (sec)",
     min_value=1.0,
@@ -190,7 +192,7 @@ with allan_deviation:
     taus, allan_values = oadev(combined_noise, fs)
 
     # Create a figure for the Allan deviation
-    allan_plot = plot_allan_deviation(taus, allan_values, noise_model)
+    allan_plot = plot_allan_deviation(taus, allan_values, noise_model, verbose)
 
     # Plot the Allan deviation
     st.plotly_chart(allan_plot)
